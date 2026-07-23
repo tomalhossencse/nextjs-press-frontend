@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Raleway } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { Navbar } from "@/components/shared/navbar";
 
 const raleway = Raleway({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -33,7 +34,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Toaster position="top-right" richColors />
+
         {/* navbar */}
+        <Navbar />
         {children}
         {/* footer */}
       </body>
