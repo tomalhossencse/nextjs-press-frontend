@@ -2,7 +2,7 @@ import { Navbar } from '@/components/shared/navbar'
 import React from 'react'
 import { getMe } from '../(authRoutes)/_services/getMe';
 
-const DashboardLayout = async (
+const PublicLayout = async (
     { children }: { children: React.ReactNode }
 ) => {
     const user = await getMe();
@@ -14,4 +14,4 @@ const DashboardLayout = async (
     )
 }
 
-export default DashboardLayout
+export default PublicLayout

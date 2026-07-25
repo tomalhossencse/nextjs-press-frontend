@@ -36,14 +36,42 @@ const userMenuItems = [
     { title: "Settings", href: "#", icon: Settings },
 ]
 
-const user = {
-    name: "Jane Doe",
-    email: "jane@acme.com",
-    avatar: "/user-avatar.png",
-    initials: "JD",
+// const user = {
+//     name: "Jane Doe",
+//     email: "jane@acme.com",
+//     avatar: "/user-avatar.png",
+//     initials: "JD",
+// }
+
+
+type IUser = {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: {
+        id: string;
+        name: string;
+        email: string;
+        activeStatus: string;
+        role: string;
+        createdAt: string;
+        updatedAt: string;
+        profile: {
+            id: string;
+            profilePhoto: string;
+            bio: string | null;
+            createdAt: string;
+            updateAt: string;
+            userId: string;
+        };
+    };
 }
 
-export function Navbar() {
+type NavbarProps = {
+    user: IUser
+}
+
+export function Navbar({ user }: NavbarProps) {
     const pathname = usePathname()
 
     return (
@@ -85,17 +113,17 @@ export function Navbar() {
                             }
                         >
                             <Avatar className="size-8">
-                                <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                                <AvatarFallback className="text-xs">{user.initials}</AvatarFallback>
+                                <AvatarImage src={user.data?.profile.profilePhoto || "/placeholder.svg"} alt={user.data?.name} />
+                                <AvatarFallback className="text-xs">{user.data?.name.charAt(0).toUpperCase()}</AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuGroup>
                                 <DropdownMenuLabel>
                                     <div className="flex flex-col gap-0.5">
-                                        <span className="text-sm font-medium">{user.name}</span>
+                                        <span className="text-sm font-medium">{user.data?.name}</span>
                                         <span className="text-xs font-normal text-muted-foreground">
-                                            {user.email}
+                                            {user.data?.email}
                                         </span>
                                     </div>
                                 </DropdownMenuLabel>
@@ -154,12 +182,12 @@ export function Navbar() {
                             <div className="mt-auto border-t border-border px-4 py-4">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="size-9">
-                                        <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                                        <AvatarFallback className="text-xs">{user.initials}</AvatarFallback>
+                                        <AvatarImage src={user.data?.profile.profilePhoto || "/placeholder.svg"} alt={user.data?.name} />
+                                        <AvatarFallback className="text-xs">{user.data?.name.charAt(0).toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex min-w-0 flex-col">
-                                        <span className="truncate text-sm font-medium">{user.name}</span>
-                                        <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+                                        <span className="truncate text-sm font-medium">{user.data?.name}</span>
+                                        <span className="truncate text-xs text-muted-foreground">{user.data?.email}</span>
                                     </div>
                                 </div>
                                 <div className="mt-3 flex flex-col gap-1">

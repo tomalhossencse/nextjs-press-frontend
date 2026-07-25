@@ -39,14 +39,12 @@ export const loginAction = async (
         const cookieStore = await cookies();
         cookieStore.set("accessToken", result.data.accessToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: "none",
+            sameSite: "lax",
             maxAge: 1000 * 60 * 60,
         });
         cookieStore.set("refreshToken", result.data.refreshToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: "none",
+            sameSite: "lax",
             maxAge: 1000 * 60 * 60 * 24 * 1,
         });
 

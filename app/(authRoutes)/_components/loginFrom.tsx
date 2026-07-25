@@ -15,7 +15,7 @@ const LoginFrom = () => {
     useEffect(() => {
         if (!state) return;
         if (state.success) {
-            toast.success(state.message || "Login Successfull");
+            toast.success(state.message || "Login Successful");
             // router.push("/dashboard")
         }
         if (!state.success) {
