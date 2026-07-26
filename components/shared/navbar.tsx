@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Terminal, LogOut, Settings, User, Menu } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -23,6 +22,9 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { logout } from "@/app/(publicRoutes)/_services/logout"
+import { toast } from "sonner"
+import { usePathname, useRouter } from "next/navigation"
 
 const navLinks = [
     { title: "Home", href: "/" },
@@ -71,8 +73,16 @@ type NavbarProps = {
     user: IUser
 }
 
+
 export function Navbar({ user }: NavbarProps) {
     const pathname = usePathname()
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        await logout()
+        toast.success("Logout successful")
+        router.push("/login")
+    }
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border bg-background">
@@ -106,44 +116,48 @@ export function Navbar({ user }: NavbarProps) {
                 {/* Right side */}
                 <div className="flex items-center gap-2">
                     {/* User dropdown */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger
-                            render={
-                                <Button variant="ghost" size="icon" className="rounded-full" aria-label="User menu" />
-                            }
-                        >
-                            <Avatar className="size-8">
-                                <AvatarImage src={user.data?.profile.profilePhoto || "/placeholder.svg"} alt={user.data?.name} />
-                                <AvatarFallback className="text-xs">{user.data?.name.charAt(0).toUpperCase()}</AvatarFallback>
-                            </Avatar>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuGroup>
-                                <DropdownMenuLabel>
-                                    <div className="flex flex-col gap-0.5">
-                                        <span className="text-sm font-medium">{user.data?.name}</span>
-                                        <span className="text-xs font-normal text-muted-foreground">
-                                            {user.data?.email}
-                                        </span>
-                                    </div>
-                                </DropdownMenuLabel>
-                            </DropdownMenuGroup>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                                {userMenuItems.map((item) => (
-                                    <DropdownMenuItem key={item.title} render={<Link href={item.href} />}>
-                                        <item.icon />
-                                        {item.title}
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuGroup>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem variant="destructive">
-                                <LogOut />
-                                Log out
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {
+                        user.success ? (<DropdownMenu>
+                            <DropdownMenuTrigger
+                                render={
+                                    <Button variant="ghost" size="icon" className="rounded-full" aria-label="User menu" />
+                                }
+                            >
+                                <Avatar className="size-8">
+                                    <AvatarImage src={user.data?.profile.profilePhoto || "/placeholder.svg"} alt={user.data?.name} />
+                                    <AvatarFallback className="text-xs">{user.data?.name.charAt(0).toUpperCase()}</AvatarFallback>
+                                </Avatar>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                                <DropdownMenuGroup>
+                                    <DropdownMenuLabel>
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="text-sm font-medium">{user.data?.name}</span>
+                                            <span className="text-xs font-normal text-muted-foreground">
+                                                {user.data?.email}
+                                            </span>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    {userMenuItems.map((item) => (
+                                        <DropdownMenuItem key={item.title} render={<Link href={item.href} />}>
+                                            <item.icon />
+                                            {item.title}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={handleLogout} variant="destructive">
+                                    <LogOut />
+                                    Log out
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>) : (<Link href={'/login'}>
+                            <Button className="cursor-pointer">Login</Button>
+                        </Link>)
+                    }
 
                     {/* Mobile menu */}
                     <Sheet>
@@ -177,9 +191,15 @@ export function Navbar({ user }: NavbarProps) {
                                         {link.title}
                                     </Link>
                                 ))}
+                                {!user.success && <Link href={'/login'} className={cn(
+                                    "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                                    pathname === '/login'
+                                        ? "bg-accent text-accent-foreground"
+                                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                                )} >Login</Link>}
                             </nav>
 
-                            <div className="mt-auto border-t border-border px-4 py-4">
+                            {user.success && <div className="mt-auto border-t border-border px-4 py-4">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="size-9">
                                         <AvatarImage src={user.data?.profile.profilePhoto || "/placeholder.svg"} alt={user.data?.name} />
@@ -203,13 +223,14 @@ export function Navbar({ user }: NavbarProps) {
                                     ))}
                                     <button
                                         type="button"
+                                        onClick={handleLogout}
                                         className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10"
                                     >
                                         <LogOut className="size-4" />
                                         Log out
                                     </button>
                                 </div>
-                            </div>
+                            </div>}
                         </SheetContent>
                     </Sheet>
                 </div>

@@ -21,6 +21,11 @@ export const getMe = async () => {
             // Authorization : `Bearer ${accessToken}`,
             Cookie: `accessToken=${accessToken}`,
         },
+        cache: "force-cache",
+        next: {
+            revalidate: 60 * 60,
+            tags: ["my-profile"],
+        },
     });
 
     const result = await res.json();

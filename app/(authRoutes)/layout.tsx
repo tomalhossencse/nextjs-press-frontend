@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/shared/navbar'
 import React from 'react'
-import { getMe } from './_services/getMe';
+import { getMe } from '../(publicRoutes)/_services/getMe';
 
 const AuthLayout = async (
     { children }: { children: React.ReactNode }
