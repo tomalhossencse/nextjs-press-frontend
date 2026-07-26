@@ -14,6 +14,13 @@ type LoginState = {
         userInfo: unknown;
     };
 };
+
+type RegisterState = {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: unknown;
+};
 export const loginAction = async (
     prevState: LoginState,
     formData: FormData,
@@ -61,6 +68,36 @@ export const loginAction = async (
     }
 
     // console.log(result);
+
+    return result;
+};
+
+export const registerAction = async (
+    prevState: RegisterState,
+    formData: FormData,
+) => {
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const payload = {
+        name,
+        email,
+        password,
+    };
+
+    const res = await fetch(
+        `${process.env.BACKEND_API_URL}/api/users/register`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    const result = await res.json();
 
     return result;
 };
