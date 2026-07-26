@@ -23,14 +23,14 @@ export const getMe = async () => {
         },
         cache: "force-cache",
         next: {
-            revalidate: 60 * 60,
+            revalidate: 60 * 60 * 24,
             tags: ["my-profile"],
         },
     });
 
     const result = await res.json();
 
-    console.log(result);
+    // console.log(result);
 
     return result;
 };

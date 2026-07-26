@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 type LoginState = {
     success: boolean;
@@ -40,7 +41,7 @@ export const loginAction = async (
         cookieStore.set("accessToken", result.data.accessToken, {
             httpOnly: true,
             sameSite: "lax",
-            maxAge: 1000 * 60 * 60,
+            maxAge: 1000 * 60 * 60 * 24,
         });
         cookieStore.set("refreshToken", result.data.refreshToken, {
             httpOnly: true,
@@ -48,7 +49,15 @@ export const loginAction = async (
             maxAge: 1000 * 60 * 60 * 24 * 1,
         });
 
-        redirect("/dashboard", "replace");
+        const decodeToken = jwt.decode(result.data.accessToken) as JwtPayload;
+
+        if (decodeToken.role === "ADMIN") {
+            redirect("/admin-dashboard", "replace");
+        } else if (decodeToken.role === "AUTHOR") {
+            redirect("/author-dashboard", "replace");
+        } else {
+            redirect("/dashboard", "replace");
+        }
     }
 
     // console.log(result);
