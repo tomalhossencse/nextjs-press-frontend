@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { Navbar } from "@/components/shared/navbar";
-import { getMe } from "./(publicRoutes)/_services/getMe";
+import { getMe } from "../services/getMe";
 
 const raleway = Raleway({ subsets: ['latin'], variable: '--font-sans' });
 

@@ -36,8 +36,8 @@ const LoginFrom = () => {
                     placeholder="Enter your password"
                     required
                 />
-                <Button type="submit">
-                    {pending ? "submitting" : "Login"}
+                <Button disabled={pending} type="submit">
+                    {pending ? "Submitting....." : "Login"}
                 </Button>
             </Card>
         </form>

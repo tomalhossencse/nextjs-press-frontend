@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/shared/navbar'
 import React from 'react'
-import { getMe } from './_services/getMe';
+import { getMe } from '../../services/getMe';
 
 const PublicLayout = async (
     { children }: { children: React.ReactNode }

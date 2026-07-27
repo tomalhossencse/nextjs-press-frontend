@@ -1,29 +1,98 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { verifyToken } from "./utils/jwt";
+import { getNewAccessTokenByRefreshToken } from "./services/refreshToken";
+import { cookies } from "next/headers";
 
-const authRoutes = ["/login", "/register"];
-const authorRoutes = ["/author-dashboard"];
-const adminRoutes = ["/admin-dashboard"];
-const userRoutes = ["/dashboard"];
+const AUTH_ROUTES = ["/login", "/register"];
+const PUBLIC_ROUTES = ["/news", "/news/:id"];
 
 // This function can be marked `async` if using `await` inside
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     // console.log(request.nextUrl.pathname);
     const pathname = request.nextUrl.pathname;
-    const accessToken = request.cookies.get("accessToken")?.value as string;
-    const decodeToken = jwt.decode(accessToken) as JwtPayload;
+    const cookieStore = await cookies();
 
-    if (authRoutes.includes(pathname) && accessToken) {
-        return NextResponse.redirect(new URL("/", request.url));
-    } else if (adminRoutes.includes(pathname) && decodeToken.role !== "ADMIN") {
+    let accessToken = request.cookies.get("accessToken")?.value;
+    const refreshToken = request.cookies.get("refreshToken")?.value;
+
+    let decodeAccessToken = accessToken
+        ? ((await verifyToken(accessToken, "access")) as JwtPayload)
+        : null;
+
+    const decodeRefreshToken = refreshToken
+        ? ((await verifyToken(refreshToken, "refresh")) as JwtPayload)
+        : null;
+
+    if (!decodeAccessToken?.success && decodeRefreshToken?.success) {
+        const result = await getNewAccessTokenByRefreshToken();
+
+        if (result.success) {
+            const newAccessToken = result.data.accessToken;
+
+            cookieStore.set("accessToken", newAccessToken, {
+                httpOnly: true,
+                sameSite: "lax",
+                maxAge: 1000 * 60 * 60 * 24,
+            });
+
+            accessToken = newAccessToken;
+            decodeAccessToken = (await verifyToken(
+                accessToken!,
+                "access",
+            )) as JwtPayload;
+        }
+    }
+
+    let userRole = null;
+
+    if (!decodeAccessToken?.success) {
+        cookieStore.delete("accessToken");
+    }
+
+    if (decodeAccessToken?.success && decodeAccessToken?.data) {
+        userRole = decodeAccessToken.data.role;
+    }
+
+    // Authenticated user not allowed to access auth routes
+
+    if (accessToken && AUTH_ROUTES.includes(pathname)) {
+        if (userRole === "ADMIN") {
+            return NextResponse.redirect(
+                new URL("/admin-dashboard", request.url),
+            );
+        } else if (userRole === "AUTHOR") {
+            return NextResponse.redirect(
+                new URL("/author-dashboard", request.url),
+            );
+        }
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    const isPublicRoute = PUBLIC_ROUTES.some(
+        (route) => pathname === route || pathname.startsWith(route),
+    );
+
+    const isAuthRoute = AUTH_ROUTES.some(
+        (route) => pathname === route || pathname.startsWith(route),
+    );
+
+    // Unauthenticated user not allowed to access protected routes
+    if (!accessToken && !isPublicRoute && !isAuthRoute) {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    // Autorization: Role-based access control
+
+    if (pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN") {
         return NextResponse.redirect(new URL("/", request.url));
     } else if (
-        authorRoutes.includes(pathname) &&
-        decodeToken.role !== "AUTHOR"
+        pathname.startsWith("/author-dashboard") &&
+        userRole !== "AUTHOR"
     ) {
         return NextResponse.redirect(new URL("/", request.url));
-    } else if (userRoutes.includes(pathname) && decodeToken.role !== "USER") {
+    } else if (pathname.startsWith("/dashboard") && userRole !== "USER") {
         return NextResponse.redirect(new URL("/", request.url));
     }
 

@@ -22,7 +22,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { logout } from "@/app/(publicRoutes)/_services/logout"
+import { logout } from "@/services/logout"
 import { toast } from "sonner"
 import { usePathname, useRouter } from "next/navigation"
 
