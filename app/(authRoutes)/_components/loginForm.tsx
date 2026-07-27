@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { loginAction } from "../_services/authActions";
+import { loginAction } from "../_actions/authActions";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 

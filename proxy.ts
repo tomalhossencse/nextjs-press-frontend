@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 import { verifyToken } from "./utils/jwt";
 import { getNewAccessTokenByRefreshToken } from "./services/refreshToken";
 import { cookies } from "next/headers";
+import { getSubscriptionStatus } from "./app/(publicRoutes)/_actions/getSubscriptionStatus";
 
 const AUTH_ROUTES = ["/login", "/register"];
 const PUBLIC_ROUTES = ["/news", "/news/:id"];
@@ -94,6 +95,30 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL("/", request.url));
     } else if (pathname.startsWith("/dashboard") && userRole !== "USER") {
         return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    // if (pathname === "/payment") {
+    //     const statusResult = await getSubscriptionStatus();
+
+    //     const isActive = Boolean(
+    //         statusResult?.success && statusResult.data?.isSubscribed,
+    //     );
+
+    //     if (isActive) {
+    //         return NextResponse.redirect(new URL("/premium", request.url));
+    //     }
+    // }
+
+    if (pathname === "/premium") {
+        const statusResult = await getSubscriptionStatus();
+
+        const isActive = Boolean(
+            statusResult?.success && statusResult.data?.isSubscribed,
+        );
+
+        if (!isActive) {
+            return NextResponse.redirect(new URL("/payment", request.url));
+        }
     }
 
     return NextResponse.next();

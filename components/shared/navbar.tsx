@@ -31,6 +31,8 @@ const navLinks = [
     { title: "About", href: "/about" },
     { title: "Services", href: "/services" },
     { title: "Contact", href: "/contact" },
+    { title: "News", href: "/news" },
+    { title: "Premium", href: "/premium" },
 ]
 
 const userMenuItems = [
