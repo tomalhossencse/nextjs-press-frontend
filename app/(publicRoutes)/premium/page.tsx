@@ -3,6 +3,8 @@ import { NewsSearchBar } from "../_components/news/NewsSearchBar";
 import { NewsSkeleton } from "../_components/news/NewsSkeleton";
 import { PremiumNewsList } from "../_components/news/PremiumNewsList";
 import { getPremiumNews } from "../_actions/getPremiumNews";
+import { Paginations } from "../_components/news/Pagination";
+import { NewsFilter } from "../_components/news/NewsFilter";
 
 const PremiumPage = async ({
     searchParams,
@@ -20,18 +22,19 @@ const PremiumPage = async ({
         <div className="mx-auto max-w-7xl space-y-6 px-4 py-10 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 className="text-2xl font-semibold">Premium News : ({result.data.length})</h1>
+                    <h1 className="text-2xl font-semibold">Premium News : ({result?.meta?.total ?? 0})</h1>
                     <p className="text-sm text-muted-foreground">
                         Exclusive stories for our subscribers.
                     </p>
                 </div>
 
                 <NewsSearchBar />
+                <NewsFilter />
             </div>
 
-            <Suspense fallback={<NewsSkeleton />}>
-                <PremiumNewsList result={result} />
-            </Suspense>
+            <PremiumNewsList result={result} />
+            <Paginations result={result} />
+
         </div>
     );
 };

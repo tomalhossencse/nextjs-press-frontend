@@ -53,7 +53,7 @@ export const getNews = async ({
     const accessToken = cookieStore.get("accessToken")?.value;
 
     const res = await fetch(
-        `${process.env.BACKEND_API_URL}/api/posts${queryString ? `?${queryString}` : ""}`,
+        `${process.env.BACKEND_API_URL}/api/posts?limit=6${queryString ? `&${queryString}` : ""}`,
         {
             headers: {
                 Cookie: `accessToken=${accessToken}`,
