@@ -6,6 +6,8 @@ import { cookies } from "next/headers";
 type NewsQuery = {
     searchTerm?: string | string[];
     page?: string | string[];
+    sortBy?: string | string[];
+    sortOrder?: string | string[];
 };
 
 export const getNews = async ({
@@ -19,6 +21,14 @@ export const getNews = async ({
         ? query.searchTerm[0]
         : query?.searchTerm;
 
+    const sortBy = Array.isArray(query?.sortBy)
+        ? query.sortBy[0]
+        : query?.sortBy;
+
+    const sortOrder = Array.isArray(query?.sortOrder)
+        ? query.sortOrder[0]
+        : query?.sortOrder;
+
     const page = Array.isArray(query?.page) ? query.page[0] : query?.page;
 
     if (searchTerm) {
@@ -27,6 +37,13 @@ export const getNews = async ({
 
     if (page) {
         params.set("page", page);
+    }
+
+    if (sortBy) {
+        params.set("sortBy", sortBy);
+    }
+    if (sortOrder) {
+        params.set("sortOrder", sortOrder);
     }
 
     const queryString = params.toString();

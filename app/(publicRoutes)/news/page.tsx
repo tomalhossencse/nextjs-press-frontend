@@ -5,6 +5,7 @@ import { getNews } from "../_actions/getNews";
 import { NewsSearchBar } from "../_components/news/NewsSearchBar";
 import { Paginations } from "../_components/news/Pagination";
 import { IPostResponse } from "@/lib/types";
+import { NewsFilter } from "../_components/news/NewsFilter";
 
 const NewsPage = async ({
     searchParams,
@@ -28,17 +29,11 @@ const NewsPage = async ({
                     </p>
                 </div>
                 <NewsSearchBar />
+                <NewsFilter />
             </div>
 
-
-            <Suspense fallback={<NewsSkeleton />}>
-                <PublicNewsList result={result} />
-            </Suspense>
-
-
+            <PublicNewsList result={result} />
             <Paginations result={result} />
-
-
         </div >
     );
 };

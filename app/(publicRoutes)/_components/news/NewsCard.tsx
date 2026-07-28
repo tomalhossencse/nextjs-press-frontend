@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IPost } from "@/lib/types";
-import { MessageSquareIcon, SparklesIcon } from "lucide-react";
+import { EyeIcon, MessageSquareIcon, SparklesIcon } from "lucide-react";
 import Image from "next/image";
 
 type NewsCardProps = {
@@ -53,6 +53,10 @@ export function NewsCard({ post }: NewsCardProps) {
                     <span>
                         By {post.author?.name ?? "Unknown"} ·{" "}
                         {new Date(post.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center gap-1">
+                        <EyeIcon className="size-3.5" />
+                        {post.views ?? 0}
                     </span>
                     <span className="flex items-center gap-1">
                         <MessageSquareIcon className="size-3.5" />
