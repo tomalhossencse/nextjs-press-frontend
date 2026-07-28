@@ -1,29 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { IPost } from "@/lib/types";
+import { IPostResponse } from "@/lib/types";
 import { NewsCard } from "./NewsCard";
 
-export async function PublicNewsList() {
+export async function PublicNewsList({ result }: { result: IPostResponse }) {
 
-    const result = {
-        success: true,
-        data: [
-            {
-                id: "1",
-                title: "Public News 1",
-                content: "This is the content of public news 1.",
-                thumbnail: "https://via.placeholder.com/150",
-                isFeatured: true,
-                status: "PUBLISHED",
-                tags: ["tag1", "tag2"],
-                views: 100,
-                isPremium: false,
-                authorId: "1",
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-            }
-        ]
-    };
+
 
     if (!result.success || !result.data?.length) {
         return (
@@ -36,7 +16,7 @@ export async function PublicNewsList() {
     return (
         <div className="space-y-8">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {result.data.map((post: IPost | any) => (
+                {result.data.map((post) => (
                     <NewsCard key={post.id} post={post} />
                 ))}
             </div>

@@ -17,24 +17,17 @@ export function NewsSearchBar() {
         if (debounceReference.current) {
             clearTimeout(debounceReference.current)
         }
-        // const params = new URLSearchParams();
-
-        // if (value) {
-        //     params.set("searchTerm", value);
-        // } else {
-        //     params.delete("searchTerm")
-        // }
-
-        // router.replace(`${pathname}?${params.toString()}`)
 
         debounceReference.current = setTimeout(() => {
             // console.log(value, "value")
-            const params = new URLSearchParams();
+            const params = new URLSearchParams(searchParams.toString());
 
             if (value) {
                 params.set("searchTerm", value);
+                params.set("page", "1");
             } else {
                 params.delete("searchTerm")
+                params.set("page", "1");
             }
 
             router.replace(`${pathname}?${params.toString()}`)

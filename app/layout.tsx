@@ -39,7 +39,7 @@ export default async function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", inter.variable, poppins.variable, "font-sans", plusJakartaSans.variable)}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full">
         <Toaster position="top-right" richColors />
         {children}
         {/* footer */}
