@@ -99,7 +99,7 @@ export const getMyposts = async () => {
 };
 
 export const updatePost = async (
-    postId,
+    postId: string,
     prevState: IPostResponse,
     formData: FormData,
 ) => {

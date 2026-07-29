@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IPost } from "@/lib/types";
-import { MessageSquareIcon, SparklesIcon } from "lucide-react";
+import { DeleteIcon, MessageSquareIcon, SparklesIcon, Trash2Icon } from "lucide-react";
 import { PostFormDialog } from "./PostFormDialog";
 import Image from "next/image";
 type MyPostCardProps = {
@@ -44,6 +44,7 @@ export function MyPostCard({ post }: MyPostCardProps) {
                 <CardAction>
                     <PostFormDialog mode="edit" post={post} />
                 </CardAction>
+
             </CardHeader>
 
             <CardContent className="space-y-3">
@@ -53,6 +54,7 @@ export function MyPostCard({ post }: MyPostCardProps) {
 
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>{new Date(post.createdAt).toLocaleString()}</span>
+
 
                     <span className="flex items-center gap-1">
                         <MessageSquareIcon className="size-3.5" />
