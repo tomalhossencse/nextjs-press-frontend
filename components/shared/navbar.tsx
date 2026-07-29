@@ -28,11 +28,11 @@ import { usePathname, useRouter } from "next/navigation"
 
 const navLinks = [
     { title: "Home", href: "/" },
+    { title: "News", href: "/news" },
+    { title: "Premium", href: "/premium" },
     { title: "About", href: "/about" },
     { title: "Services", href: "/services" },
     { title: "Contact", href: "/contact" },
-    { title: "News", href: "/news" },
-    { title: "Premium", href: "/premium" },
 ]
 
 const userMenuItems = [

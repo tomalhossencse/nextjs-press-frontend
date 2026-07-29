@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
             {
                 hostname: "images.unsplash.com",
             },
+            {
+                hostname: "static.vecteezy.com",
+            },
         ],
     },
 };

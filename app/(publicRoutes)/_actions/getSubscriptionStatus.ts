@@ -17,6 +17,5 @@ export const getSubscriptionStatus = async () => {
     );
 
     const result = await res.json();
-
     return result;
 };
