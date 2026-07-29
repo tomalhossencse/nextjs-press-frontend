@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IPost } from "@/lib/types";
-import { DeleteIcon, MessageSquareIcon, SparklesIcon, Trash2Icon } from "lucide-react";
+import { MessageSquareIcon, SparklesIcon, } from "lucide-react";
 import { PostFormDialog } from "./PostFormDialog";
 import Image from "next/image";
 type MyPostCardProps = {
@@ -18,6 +18,7 @@ export function MyPostCard({ post }: MyPostCardProps) {
                     src={post.thumbnail}
                     alt={post.title}
                     fill
+
                     className="rounded-t-lg"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     loading="eager"
