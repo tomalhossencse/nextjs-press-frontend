@@ -6,10 +6,14 @@ import { Input } from "@/components/ui/input";
 import { loginAction } from "../_actions/authActions";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 
 const LoginFrom = () => {
-    const [state, action, pending] = useActionState(loginAction, false);
+    const searchParams = useSearchParams();
+    const redirectUrl = searchParams.get("redirectUrl");
+
+    const [state, action, pending] = useActionState(loginAction.bind(null, redirectUrl), false);
 
     useEffect(() => {
         if (!state) return;

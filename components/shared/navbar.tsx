@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { logout } from "@/services/logout";
+import Image from "next/image";
 
 // Navigation items configuration
 const navItems = [
@@ -89,10 +90,18 @@ export function Navbar({ user }: NavbarProps) {
                         user.success ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <div className="cursor-pointer">
-                                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                            <User className="w-4 h-4 text-primary" />
-                                        </div>
+                                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-primary/10">
+                                        {user.data?.profile?.profilePhoto ? (
+                                            <Image
+                                                src={user.data.profile.profilePhoto}
+                                                alt={user.data.name ?? "User Avatar"}
+                                                width={32}
+                                                height={32}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <User className="h-4 w-4 text-muted-foreground" />
+                                        )}
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-56">

@@ -82,7 +82,7 @@ export async function proxy(request: NextRequest) {
     // Unauthenticated user not allowed to access protected routes
     if (!accessToken && !isPublicRoute && !isAuthRoute) {
         const loginUrl = new URL("/login", request.url);
-        loginUrl.searchParams.set("redirect", pathname);
+        loginUrl.searchParams.set("redirectUrl", pathname);
 
         return NextResponse.redirect(loginUrl);
     }
